@@ -45,4 +45,4 @@ for filename in os.listdir('./cogs'):
 
 #Starts up the bot
 
-client.run('NzUwMTkzNzEyMDg4MzUwNzkw.X02-Vg.jiTRIjsD76aLPA8oUg1oL44JDSg')
+client.run('TOKEN')
