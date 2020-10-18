@@ -16,14 +16,16 @@ class startup(commands.Cog):
         self.change_status.start()
         print('!!!!BOT IS READY!!!!')
 
-    #Catches any wrong inputs, and returns either error message.
+    # Catches any wrong inputs, and returns either error message.
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send('Please input the correct arguments')
+            await ctx.send('Please input the correct argument!')
         elif isinstance(error, commands.CommandNotFound):
-            await ctx.send('Invalid command, please input a valid command')
+            await ctx.send('Invalid command! check .help for commands you can use.')
+        elif isinstance(error, commands.CommandOnCooldown):
+            await ctx.send(f'You are on cooldown! Please wait until `{round(error.retry_after, 3)}s`')
 
 
 def setup(client):
