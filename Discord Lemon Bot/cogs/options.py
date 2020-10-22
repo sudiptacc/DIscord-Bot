@@ -51,17 +51,6 @@ class options(commands.Cog):
             await ctx.send('Please enter a maximum number higher than 1.')
         else:
             await ctx.send(f'You rolled a {random.randint(1, maximum)}!')
-           
-# COINFLIP COMMAND (Returns heads or tails) 
-
-    @commands.command()
-    @commands.cooldown(1, 1, BucketType.user)
-    async def coinflip(self, ctx):
-        flip = random.randint(1, 2)
-        if flip == 1:
-            await ctx.send('You flipped heads.')
-        else:
-            await ctx.send('You flipped tails.')
             
 # FACT COMMAND (Returns a random fact from the facts file.)
             
@@ -115,6 +104,37 @@ class options(commands.Cog):
     async def invite(self, ctx):
         await ctx.send('You can invite me to servers using: https://discord.com/api/oauth2/authorize?client_id=750193712088350790&permissions=523328&scope=bot')
 
+# RANDOM QUOTE COMMAND (Returns a random string of words)
+
+    @commands.command() 
+    @commands.cooldown(1, 1, BucketType.user)
+    async def quote(self, ctx):
+        length = range(0, (random.randint(1, 10)))
+        with open('./bot_resources/words.txt') as f:
+            words = f.readlines()
+            words = [word.strip('\n') for word in words]
+            quote_words = [random.choice(words) for _ in length]
+            quote = ' '.join(quote_words)
+
+        await ctx.send(f'{quote} ~ Lemon Bot')
+
+# AVATAR COMMAND (Returns an enlargened image of the author)
+
+    @commands.command()
+    @commands.cooldown(1, 1, BucketType.user)
+    async def avatar(self, ctx, user: discord.User = None):
+        if user == None:
+            embed=discord.Embed(title="Avatar")
+            embed.set_author(name=ctx.author.name)
+            embed.set_image(url=ctx.author.avatar_url)
+            await ctx.send(embed=embed)
+        else:
+            embed=discord.Embed(title="Avatar")
+            embed.set_author(name=user.name)
+            embed.set_image(url=user.avatar_url)
+            await ctx.send(embed=embed)
+
+
 # MISC COMMANDS (other stuff)
 
     @commands.command()
@@ -142,6 +162,16 @@ class options(commands.Cog):
         await ctx.send(file=discord.File(f'./bot_resources/{image}.jpg'))
         image = random.choice(['daniel', 'dieter', 'nol', 'nol2', 'nol3', 'dieter2'])
         await ctx.send(file=discord.File(f'./bot_resources/{image}.jpg'))
+
+    @commands.command()
+    @commands.cooldown(1, 10000000000, BucketType.user)
+    async def say(self, ctx):
+        while True:
+            message = input('> ')
+            if message.lower() == 'stop':
+                break
+            await ctx.send(message)
+            
 
 
 def setup(client):

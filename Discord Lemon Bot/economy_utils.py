@@ -22,6 +22,12 @@ def get_balance(user):
 
     return playerstats[str(user)]['balance']
 
+def get_inventory(user):
+    with open('./jsons/playerstats.json', 'r') as f:
+        playerstats = json.load(f)
+
+    return playerstats[str(user)]['inventory']
+
 # MULTIPLIER AND PRESTIGE FUNCTIONS
 
 def get_multiplier(user):
