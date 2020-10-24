@@ -4,36 +4,44 @@ This discord bot isn't meant to be anything serious, but more as a playground.
 
 ## Commands
 
-- Help
-- Ping
-- About
-- Daily
-- Stats
-- Give
-- Prestige + Prestigeinfo
-- Multiplier
-- Steal
-- Inventory
-- Shop
-- Buy
-- Sell
-- Trivia
-- Guess
-- Blackjack
-- Unscramble
-- Challenge
-- Fish
-- Ask
-- Eightball
-- Roll
-- Fact
-- Search
-- Poll
-- Membercount
-- Choose
-- Invite
-- Quote
-- Avatar
-- Changeprefix
+### Basic Commands
+- help
+- ping
+- about
+
+### Fun Commands
+- ask
+- eightball
+- roll
+- fact
+- search
+- poll
+- membercount
+- choose
+- invite
+- quote
+- avatar
+- suggest
+
+### Economy Commands
+- daily
+- stats
+- give
+- level
+- inventory
+- shop
+- sell
+- buy
+- leaderboard
+- prestige
+
+### Game Commands
+- trivia
+- guess
+- blackjack
+- unscramble
+- challenge
+- fish
+- memory
 
 [![Run on Repl.it](https://repl.it/badge/github/sudiptacc/Discord-Bot)](https://repl.it/github/sudiptacc/Discord-Bot)
