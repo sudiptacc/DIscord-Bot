@@ -1,0 +1,107 @@
+{
+    "385929138256740354": {
+        "balance": 100,
+        "multiplier": 1,
+        "level": 0,
+        "prestige": 1,
+        "inventory": []
+    },
+    "529490561137115157": {
+        "balance": 3681.25,
+        "multiplier": 10.0,
+        "level": 36,
+        "prestige": 1,
+        "inventory": [
+            "fishing rod",
+            "fishing rod",
+            "challenging rod"
+        ]
+    },
+    "306937268768210944": {
+        "balance": 100,
+        "multiplier": 1,
+        "level": 0,
+        "prestige": 1,
+        "inventory": []
+    },
+    "529154044179120131": {
+        "balance": 100,
+        "multiplier": 1,
+        "level": 0,
+        "prestige": 1,
+        "inventory": []
+    },
+    "766527168788168764": {
+        "balance": 100,
+        "multiplier": 1,
+        "level": 0,
+        "prestige": 1,
+        "inventory": []
+    },
+    "464868013825327105": {
+        "balance": 1040.0,
+        "multiplier": 1,
+        "level": 0,
+        "prestige": 1,
+        "inventory": [
+            "fishing rod"
+        ]
+    },
+    "286997241938444308": {
+        "balance": 1308050.0,
+        "multiplier": 8.0,
+        "level": 28,
+        "prestige": 1,
+        "inventory": [
+            "normal fishing rod",
+            "challenging rod",
+            "rod of champions",
+            "rod of legends"
+        ]
+    },
+    "385472198598590464": {
+        "balance": 100,
+        "multiplier": 1,
+        "level": 0,
+        "prestige": 1,
+        "inventory": []
+    },
+    "346925890208268301": {
+        "balance": 147880.0,
+        "multiplier": 20.25,
+        "level": 77,
+        "prestige": 1,
+        "inventory": [
+            "normal fishing rod",
+            "shredder"
+        ]
+    },
+    "344343492337729537": {
+        "balance": 100,
+        "multiplier": 1,
+        "level": 0,
+        "prestige": 1,
+        "inventory": []
+    },
+    "342759523100131339": {
+        "balance": 100,
+        "multiplier": 1,
+        "level": 0,
+        "prestige": 1,
+        "inventory": []
+    },
+    "508717468714401793": {
+        "balance": 100,
+        "multiplier": 1,
+        "level": 0,
+        "prestige": 1,
+        "inventory": []
+    },
+    "529810035434323999": {
+        "balance": 100,
+        "multiplier": 1,
+        "level": 0,
+        "prestige": 1,
+        "inventory": []
+    }
+}

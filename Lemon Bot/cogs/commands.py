@@ -1,5 +1,11 @@
-import discord
+'''
+Imports from internal packages
+'''
 import random
+'''
+Imports from external packages
+'''
+import discord
 import tenorpy
 import wolframalpha
 from discord.ext import commands
@@ -7,7 +13,7 @@ from discord.ext.commands import BucketType
 
 tenor = tenorpy.Tenor()
 
-class options(commands.Cog):
+class commands(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -30,9 +36,9 @@ class options(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 1, BucketType.user)
     async def eightball(self, ctx, *, question):
-        with open('./bot_resources/8ball.txt', 'r') as eightball_lines:
+        with open('./bot_resources/texts/8ball.txt', 'r') as eightball_lines:
             eightball_lines_list = [line.strip('\n') for line in eightball_lines]
-        embed=discord.Embed(title="8 Ball ", color=0x00b3ff)
+        embed=discord.Embed(title="8 Ball ", color=ctx.author.color)
         embed.add_field(name="Question:", value=question, inline=False)
         embed.add_field(name="Answer", value=random.choice(eightball_lines_list), inline=True)
         await ctx.send(embed=embed)
@@ -57,16 +63,21 @@ class options(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 1, BucketType.user)
     async def fact(self, ctx):
-        with open('./bot_resources/facts.txt', 'r') as facts_file:
+        with open('./bot_resources/texts/facts.txt', 'r') as facts_file:
             facts = facts_file.readlines()
-        await ctx.send(random.choice(facts))
+            embed=discord.Embed(title="Fact", color=ctx.author.color)
+        embed.add_field(name="A random fact...", value=random.choice(facts), inline=False)
+        await ctx.send(embed=embed)
         
 # SEARCH COMMAND (searches a gif from tenor api, and returns it)
 
     @commands.command()
     @commands.cooldown(1, 1, BucketType.user)
     async def search(self, ctx, choice):
-        await ctx.send(tenor.random(str(choice)))
+        embed=discord.Embed(title="Search", color=ctx.author.color)
+        embed.add_field(name="A random gif...", value=f"Result for {choice}", inline=False)
+        embed.set_image(url=tenor.random(str(choice)))
+        await ctx.send(embed=embed)
 
 # POLL COMMAND (Creates a poll)
 
@@ -86,8 +97,13 @@ class options(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 1, BucketType.user)
     async def membercount(self, ctx):
-        count = len(ctx.guild.members)
-        await ctx.send(f'{ctx.guild.name} currently has {count} members.')
+        count = 0
+        for member in ctx.guild.members:
+            if not member.bot:
+                count += 1
+        embed=discord.Embed(title="Members", color=ctx.author.color)
+        embed.add_field(name=f"{ctx.guild.name} currently has...", value=f"{count} members!", inline=False)
+        await ctx.send(embed=embed)
 
 # CHOOSE COMMAND (Duh)
 
@@ -102,7 +118,9 @@ class options(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 1, BucketType.user)
     async def invite(self, ctx):
-        await ctx.send('You can invite me to servers using: https://discord.com/api/oauth2/authorize?client_id=750193712088350790&permissions=523328&scope=bot')
+        embed=discord.Embed(title="Invite", color=ctx.author.color)
+        embed.add_field(name="You can invite me other servers using:", value="https://discord.com/api/oauth2/authorize?client_id=750193712088350790&permissions=523328&scope=bot", inline=False)
+        await ctx.send(embed=embed)
 
 # RANDOM QUOTE COMMAND (Returns a random string of words)
 
@@ -110,13 +128,16 @@ class options(commands.Cog):
     @commands.cooldown(1, 1, BucketType.user)
     async def quote(self, ctx):
         length = range(0, (random.randint(1, 10)))
-        with open('./bot_resources/words.txt') as f:
+        with open('./bot_resources/texts/words.txt') as f:
             words = f.readlines()
             words = [word.strip('\n') for word in words]
             quote_words = [random.choice(words) for _ in length]
             quote = ' '.join(quote_words)
+        embed=discord.Embed(title="Quote", color=ctx.author.color)
+        embed.add_field(name="Inspirational quote...", value=f"*{quote}*", inline=False)
+        embed.set_footer(text="~ Lemon Bot")
 
-        await ctx.send(f'{quote} ~ Lemon Bot')
+        await ctx.send(embed=embed)
 
 # AVATAR COMMAND (Returns an enlargened image of the author)
 
@@ -124,7 +145,7 @@ class options(commands.Cog):
     @commands.cooldown(1, 1, BucketType.user)
     async def avatar(self, ctx, user: discord.User = None):
         if user == None:
-            embed=discord.Embed(title="Avatar")
+            embed=discord.Embed(title="Avatar", color=ctx.author.color)
             embed.set_author(name=ctx.author.name)
             embed.set_image(url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
@@ -134,37 +155,25 @@ class options(commands.Cog):
             embed.set_image(url=user.avatar_url)
             await ctx.send(embed=embed)
 
+    @commands.command()
+    @commands.cooldown(1, 1, BucketType.user)
+    async def suggest(self, ctx, *, bug: str):
+        with open('./bot_resources/texts/bugs.txt', 'r') as f:
+            lines = f.readlines()
+        lines.append(f'{bug}\n')
+        with open('./bot_resources/texts/bugs.txt', 'w') as f:
+            f.writelines(lines)
+        await ctx.send('Received your suggestion/report! Thank you!')
+
 
 # MISC COMMANDS (other stuff)
 
-    @commands.command()
-    @commands.cooldown(1, 1, BucketType.user)
-    async def amanda(self, ctx):
-        amanda_id = '<@529490561137115157>'
-        await ctx.send(amanda_id + ', you have been summoned')
-        await ctx.send(tenor.random('jungkook'))
-        await ctx.send(tenor.random('han jisung'))
-        
-    @commands.command()
-    @commands.cooldown(1, 1, BucketType.user)
-    async def ananna(self, ctx):
-        ananna_id = '<@529154044179120131>'
-        await ctx.send(ananna_id + ', you have been summoned')
-        await ctx.send(tenor.random('jungkook'))
-        await ctx.send(tenor.random('felix'))
-        
-    @commands.command()
-    @commands.cooldown(1, 1, BucketType.user)
-    async def hans(self, ctx):
-        hans_id = '<@306937268768210944>'
-        image = random.choice(['daniel', 'dieter', 'nol', 'nol2', 'nol3', 'dieter2'])
-        await ctx.send(hans_id + ', you have been summoned')
-        await ctx.send(file=discord.File(f'./bot_resources/{image}.jpg'))
-        image = random.choice(['daniel', 'dieter', 'nol', 'nol2', 'nol3', 'dieter2'])
-        await ctx.send(file=discord.File(f'./bot_resources/{image}.jpg'))
+    def bot_owner(ctx):
+        return ctx.author.id == 385929138256740354
 
     @commands.command()
-    @commands.cooldown(1, 10000000000, BucketType.user)
+    @commands.check(bot_owner)
+    @commands.cooldown(1, 1, BucketType.user)
     async def say(self, ctx):
         while True:
             message = input('> ')
@@ -175,5 +184,5 @@ class options(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(options(client))
+    client.add_cog(commands(client))
 

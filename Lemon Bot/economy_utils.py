@@ -28,7 +28,7 @@ def get_inventory(user):
 
     return playerstats[str(user)]['inventory']
 
-# MULTIPLIER AND PRESTIGE FUNCTIONS
+# MULTIPLIER AND level AND prestige FUNCTIONS
 
 def get_multiplier(user):
     with open('./jsons/playerstats.json', 'r') as f:
@@ -36,14 +36,14 @@ def get_multiplier(user):
 
     return playerstats[str(user)]['multiplier']
 
-def get_prestige(user):
+def get_level(user):
     with open('./jsons/playerstats.json', 'r') as f:
         playerstats = json.load(f)
 
-    if playerstats[str(user)]['prestige'] >= 100:
+    if playerstats[str(user)]['level'] >= 100:
         return 'MAX'
 
-    return playerstats[str(user)]['prestige']
+    return playerstats[str(user)]['level']
 
 def add_multiplier(user):
     with open('./jsons/playerstats.json', 'r') as f:
@@ -52,34 +52,41 @@ def add_multiplier(user):
     with open('./jsons/playerstats.json', 'w') as f:
         json.dump(playerstats, f, indent=4)
 
-def add_prestige(user):
+def add_level(user):
     with open('./jsons/playerstats.json', 'r') as f:
         playerstats = json.load(f)
-        playerstats[str(user)]['prestige'] += 1
+        playerstats[str(user)]['level'] += 1
     with open('./jsons/playerstats.json', 'w') as f:
         json.dump(playerstats, f, indent=4)
 
-def prestige_can_happen(user):
+def level_can_happen(user):
     with open('./jsons/playerstats.json', 'r') as f:
         playerstats = json.load(f)
 
-    if playerstats[str(user)]['prestige'] >= 100:
+    if playerstats[str(user)]['level'] >= 100:
         return False
 
-    if playerstats[str(user)]['balance'] >= round((5 * get_prestige(user)**3)/5):
+    if playerstats[str(user)]['balance'] >= round((5 * get_level(user)**3)/5):
         return True
     else:
         return False
 
-def prestige_action(user):
+def level_action(user):
     with open('./jsons/playerstats.json', 'r') as f:
         playerstats = json.load(f)
 
-    if prestige_can_happen(user):
-        playerstats[str(user)]['balance'] >= round((5 * get_prestige(user)**3)/5)
-        withdraw(user, round((5 * get_prestige(user)**3)/5))
-        add_prestige(user)
+    if level_can_happen(user):
+        playerstats[str(user)]['balance'] >= round((5 * get_level(user)**3)/5)
+        withdraw(user, round((5 * get_level(user)**3)/5))
+        add_level(user)
         add_multiplier(user)
+
+def get_prestige(user):
+    with open('./jsons/playerstats.json', 'r') as f:
+        playerstats = json.load(f)
+
+    return playerstats[str(user)]['prestige']
+
         
 
            

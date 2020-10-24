@@ -1,4 +1,10 @@
+'''
+Imports from internal packages
+'''
 import random
+'''
+Imports from external packages
+'''
 import asyncio
 import discord
 import economy_utils as econ
@@ -72,12 +78,15 @@ class game(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
-    async def blackjack(self, ctx, bet: int):
+    async def blackjack(self, ctx, bet: float):
         if bet > econ.get_balance(ctx.author.id):
             await ctx.send('You can\'t bet that! you\'re broke lmao')
             return
         elif bet > 500000:
             await ctx.send('That\'s too much! It is over the maximum amount you can bet. (`$500000`)')
+            return
+        elif bet < 0:
+            await ctx.send('Are you trying to lose your money?')
             return
         hits = 0
         prize = bet * 2         
@@ -135,7 +144,7 @@ class game(commands.Cog):
     async def unscramble(self, ctx):
         tries = 0
         prize = random.randint(150, 300) * econ.get_multiplier(ctx.author.id)
-        with open('./bot_resources/words.txt', 'r') as f:
+        with open('./bot_resources/texts/words.txt', 'r') as f:
             words = f.readlines()
             words = [word.strip('\n') for word in words]
             word_original = random.choice(words)
@@ -185,20 +194,15 @@ class game(commands.Cog):
                 await ctx.send('Coinflip cancelled!')
                 return
 
-# FISHING GAME (TODO)
-# Have to buy a normal fishing rod: $1000 (goes in inventory)
-# Regular multiplier does not stack on fishing
-# $250 - $4999 (80%) 5000-10000 (20%) reward
-# You can fish up a different rods from fishing (10% - 2.5x) (5% 4x) (1.25% 5x) (0.75% 10x)
-# 60s cooldown
-# (?) React to edited message within 5 seconds to catch. 
+# FISHING GAME
+# NOTE: NERF THE FISHING MULTIPLIERS
 
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def fish(self, ctx):
         if 'fishing rod' in econ.get_inventory(ctx.author.id) or 'normal fishing rod' in econ.get_inventory(ctx.author.id):
             if 'shredder' in econ.get_inventory(ctx.author.id):
-                multiplier = 100
+                multiplier = 75
             elif 'rod of legends' in econ.get_inventory(ctx.author.id):
                 multiplier = 50   
             elif 'rod of champions' in econ.get_inventory(ctx.author.id):
@@ -213,11 +217,21 @@ class game(commands.Cog):
                 prize = random.randint(250, 4999) * multiplier
             else:
                 prize = random.randint(5000, 10000) * multiplier
-            bot_msg = await ctx.send(':ocean::ocean::ocean::ocean::ocean::ocean:      (Type \'catch\' to catch the fish!)')
+
+            def check(message):
+                return message.content.lower() == 'catch' and message.author.id == ctx.author.id
+
+            embed=discord.Embed(title="Fishing", description="Type 'catch' when the fish appear!", color=0x16dbe9)
+            embed.set_author(name=ctx.author.name)
+            embed.add_field(name="the lake...", value=":ocean::ocean::ocean::ocean::ocean:", inline=True)
+            msg = await ctx.send(embed=embed)
+            new_embed=discord.Embed(title="Fishing", description="Type 'catch' when the fish appear!", color=0x16dbe9)
+            new_embed.set_author(name=ctx.author.name)
+            new_embed.add_field(name="the lake...", value=":ocean::fish::ocean::fish::ocean:", inline=True)
             await asyncio.sleep(random.randint(1, 10))
-            await bot_msg.edit(content=':ocean::fish::ocean::fish::ocean::ocean:     (Type \'catch\' to catch to fish!)')
+            await msg.edit(embed=new_embed)
             try:
-                await self.client.wait_for('message', check=lambda message: message.author.id == ctx.author.id, timeout=3.0)    
+                await self.client.wait_for('message', check=check, timeout=3.0)    
             except asyncio.TimeoutError:
                 await ctx.send('You didn\'t catch the fish in time!')
             else:
@@ -227,6 +241,42 @@ class game(commands.Cog):
         else:
             await ctx.send('You do not have a fishing rod! Please buy a fishing rod from the shop. If you have sold one, make sure not to sell it as you will need it.')
 
+
+# MEMORY GAME
+
+    @commands.command()
+    @commands.cooldown(1, 10, BucketType.user)
+    async def memory(self, ctx):
+        prize = random.randint(250, 500) * econ.get_multiplier(ctx.author.id)
+        with open('./bot_resources/texts/words.txt', 'r') as f:
+            words = f.readlines()
+            words = [word.strip('\n') for word in words]
+            memory_list = [random.choice(words) for _ in range(0, 3)]
+            for word in memory_list:
+                if "'" in word:
+                    word = random.choice(words)
+            bot_msg = await ctx.send(f'Memorize this word: `{memory_list[0]}`')
+            await asyncio.sleep(1)
+            await bot_msg.edit(content=f'The next word: `{memory_list[1]}`')
+            await asyncio.sleep(1)
+            await bot_msg.edit(content=f'The next word: `{memory_list[2]}`')
+            await asyncio.sleep(1)
+            await bot_msg.edit(content='Write the words that were shown! `Note: separate them using commas`')
+
+            def check(message):
+                return message.author.id == ctx.author.id
+            try:
+                response = await self.client.wait_for('message', check=check, timeout=20.0)
+                response_list = response.content.split(',')
+                response_list = [word.strip() for word in response_list]
+            except asyncio.TimeoutError:
+                await ctx.send(f'You timed out! The words were `{", ".join(memory_list)}`')
+            else:
+                if response_list == memory_list:
+                    await ctx.send(f'You guessed the words! You won `${prize}`')
+                    econ.deposti(ctx.author.id, prize)
+                else:
+                    await ctx.send(f'Those were not the words! They were `{", ".join(memory_list)}`')
 
 def setup(client):
     client.add_cog(game(client))
