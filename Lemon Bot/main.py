@@ -89,4 +89,4 @@ keep_alive.keep_alive()
 
 # Starts up the bot
 
-client.run('NzUwMTkzNzEyMDg4MzUwNzkw.X02-Vg.ZrIggpUc8L1-zLasHERIW7Z0tNc')
+client.run('TOKEN')
