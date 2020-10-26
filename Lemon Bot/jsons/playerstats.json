@@ -48,15 +48,13 @@
         ]
     },
     "286997241938444308": {
-        "balance": 1308050.0,
+        "balance": 3819.25,
         "multiplier": 8.0,
-        "level": 28,
-        "prestige": 1,
+        "level": 24,
+        "prestige": 2,
         "inventory": [
             "normal fishing rod",
-            "challenging rod",
-            "rod of champions",
-            "rod of legends"
+            "challenging rod"
         ]
     },
     "385472198598590464": {
@@ -67,7 +65,7 @@
         "inventory": []
     },
     "346925890208268301": {
-        "balance": 147880.0,
+        "balance": 353530.0,
         "multiplier": 20.25,
         "level": 77,
         "prestige": 1,
@@ -84,14 +82,14 @@
         "inventory": []
     },
     "342759523100131339": {
-        "balance": 100,
+        "balance": 0.0,
         "multiplier": 1,
         "level": 0,
         "prestige": 1,
         "inventory": []
     },
     "508717468714401793": {
-        "balance": 100,
+        "balance": 100.0,
         "multiplier": 1,
         "level": 0,
         "prestige": 1,
@@ -102,6 +100,12 @@
         "multiplier": 1,
         "level": 0,
         "prestige": 1,
+        "inventory": []
+    },
+    "750193712088350790": {
+        "balance": 100,
+        "multiplier": 1,
+        "level": 0,
         "inventory": []
     }
 }

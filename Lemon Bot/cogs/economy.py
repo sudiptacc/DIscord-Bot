@@ -1,7 +1,6 @@
 '''
 Imports from internal packages
 '''
-import random
 import json
 import datetime
 '''
@@ -99,7 +98,7 @@ class economy(commands.Cog):
             embed.add_field(name="Balance", value=f'`${round(econ.get_balance(user.id), 2)}`', inline=True)
             embed.add_field(name="Multiplier", value=f'`{econ.get_multiplier(user.id)}x`', inline=True)
             embed.add_field(name="level", value=f'`{econ.get_level(user.id)}`', inline=True)
-            embed.add_field(name="Prestige", value=f'`{econ.get_prestige(ctx.author.id)}`', inline=True)
+            embed.add_field(name="Prestige", value=f'`{econ.get_prestige(user.id)}`', inline=True)
             await ctx.send(embed=embed)
 
 # TRADING BETWEEN PLAYERS
@@ -174,8 +173,7 @@ class economy(commands.Cog):
             embed.add_field(name="Items", value=f'`{inventory_list}`', inline=True)
             await ctx.send(embed=embed)
 
-# SHOP, BUYING, SELLING, AND OTHER TODO
-# NOTE: INCREASE SHREDDER PRICE
+# SHOP, BUYING, SELLING, AND OTHER
 
     @commands.command()
     @commands.cooldown(1, 1, BucketType.user)
@@ -256,7 +254,7 @@ class economy(commands.Cog):
             playerstats = json.load(f)
 
         stats_sorted = sorted(playerstats, key=lambda x: playerstats[x].get('balance', 0), reverse=True)
-        embed=discord.Embed(title="Leaderboards", color=ctx.author.color)
+        embed=discord.Embed(title="Leaderboards (Top 5)", color=ctx.author.color)
         embed.set_author(name=ctx.guild.name)
         members = [str(member.id) for member in ctx.guild.members]
         pos = 1
@@ -265,11 +263,16 @@ class economy(commands.Cog):
             if user not in members:
                 continue
             else:
-                user_info = await self.client.fetch_user(user)
-                embed.add_field(name=f'{pos}: {user_info.name}', value=f'*Balance: `${econ.get_balance(user)}`\nMultiplier: `{econ.get_multiplier(user)}`\nLevel: `{econ.get_level(user)}`\nPrestige: `{econ.get_prestige(user)}`*', inline=False)
-                pos += 1
+                if pos > 5:
+                    break
+                else:
+                    user_info = await self.client.fetch_user(user)
+                    embed.add_field(name=f'{pos}: {user_info.name}', value=f'*Balance: `${econ.get_balance(user)}`\nMultiplier: `{econ.get_multiplier(user)}`\nLevel: `{econ.get_level(user)}`\nPrestige: `{econ.get_prestige(user)}`*', inline=False)
+                    pos += 1
             
         await ctx.send(embed=embed)
+
+# PRESTIGE
 
     @commands.command()
     @commands.cooldown(1, 1, BucketType.user)
